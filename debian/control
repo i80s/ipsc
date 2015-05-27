@@ -1,0 +1,12 @@
+Source: ipsc
+Maintainer: Jianying Liu <rssn@163.com>
+Section: misc
+Priority: optional
+Build-Depends: debhelper (>= 7)
+
+Package: ipsc
+Architecture: all
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Description: IP Address Locating Tool (GNU C)
+  Blog  : http://blog.csdn.net/rssn_net/
+ 

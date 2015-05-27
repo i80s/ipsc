@@ -1,0 +1,5 @@
+#!/bin/sh
+
+# Please write your uninstall script here...
+echo ------ postrm
+
