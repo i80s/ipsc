@@ -8,7 +8,8 @@ prefix	?= /usr/local
 all: ipsc
 
 ipsc: ipsc.o IpLocator.o
-	$(CC) -o $@ $^ -liconv
+	$(CC) -o $@ $^
+##-liconv
 
 #Rules.make
 %.o: %.c $(HEADERS)
