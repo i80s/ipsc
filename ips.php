@@ -1,5 +1,7 @@
 <?php
 
+error_reporting(0);
+
 $dat_path = 'QQWry.Dat';
 
 //$mysql=array("localhost","root","adobe","coralip_2007","珊瑚虫 2007.2.20");
