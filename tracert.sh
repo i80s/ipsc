@@ -15,7 +15,7 @@ for i in $x_requires; do
 	which $i >/dev/null 2>/dev/null || { echo -e "*** Error: The program '$i' is required!"; exit 1; }
 done
 
-traceroute $* | \
+do_overlay_text()
 {
 	# Nothing to do with the first line:
 	read m; echo $m
@@ -25,4 +25,14 @@ traceroute $* | \
 		[ ! -z "$ip" ] && { echo -ne "\033[55G  "; ./ipsc "$ip"; } || echo
 	done
 }
+
+do_traceroute()
+{
+	traceroute $* | ( do_overlay_text )
+}
+
+case "$1" in
+	overlay) do_overlay_text;;
+	*) do_traceroute "$@"
+esac
 

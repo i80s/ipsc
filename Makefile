@@ -21,6 +21,6 @@ clean:
 install: all
 	mkdir -p $(DESTDIR)$(prefix)/bin $(DESTDIR)$(prefix)/share/ipsc
 	cp -f ipsc tracert.sh $(DESTDIR)$(prefix)/bin/
-	[ -e QQWry.Dat ] || wget http://rssn.cn/QQWry.Dat -O QQWry.Dat
+	[ -e QQWry.Dat ] || wget http://s.rssn.cn:1080/QQWry.Dat -O QQWry.Dat
 	cp -f QQWry.Dat $(DESTDIR)$(prefix)/share/ipsc/
 	[ -d /www ] && cp ips.php QQWry.Dat /www/ || :
