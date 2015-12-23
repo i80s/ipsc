@@ -1,5 +1,0 @@
-#!/bin/sh
-
-# Please write your config script here...
-echo ------ postinst
-
