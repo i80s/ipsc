@@ -20,7 +20,7 @@ text_ip_location()
 
 
 		if [ -n "$ips_info" ]; then
-			echo "$line $ips_info"
+			echo -e "$line \033[32m$ips_info\033[0m"
 		else
 			echo "$line"
 		fi
