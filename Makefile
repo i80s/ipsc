@@ -12,9 +12,10 @@ clean:
 	rm -f *.o ipsc
 
 install: ipsc
-	@[ -f qqwry.dat ] || wget http://s.rssn.cn:1080/qqwry.dat -O qqwry.dat
+	@[ -f qqwry.dat ] || { echo "*** 'qqwry.dat' is not found."; exit 1; }
+	@[ -f 17monipdb.dat ] || { echo "*** '17monipdb.dat' is not found."; exit 1; }
 	mkdir -p /usr/bin /usr/lib/ipsc
-	@cp -v ipip.php qqwry.dat /usr/lib/ipsc/
+	@cp -v ipip.php qqwry.dat 17monipdb.dat /usr/lib/ipsc/
 	@cp -v ipsc ipip.sh overlay-ipinfo.sh tracert.sh /usr/bin/
 	@[ -d /www ] && cp -v ips.php /www/ || :
 
