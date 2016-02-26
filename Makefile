@@ -1,8 +1,5 @@
 CC ?= $(CROSS_COMPILE)gcc
 HEADERS := IpLocator.h
-prefix ?= /usr/local
-
-all: ipsc
 
 ipsc: ipsc.o IpLocator.o
 	$(CC) -o $@ $^
@@ -14,11 +11,10 @@ ipsc: ipsc.o IpLocator.o
 clean: 
 	rm -f *.o ipsc
 
-install: all
-	[ -f QQWry.Dat ] || wget http://s.rssn.cn:1080/QQWry.Dat -O QQWry.Dat
-	mkdir -p $(prefix)/bin $(prefix)/share/ipsc $(prefix)/share/17monipdb
-	cp QQWry.Dat $(prefix)/share/ipsc/
-	[ -d /www ] && cp ips.php QQWry.Dat /www/ || :
-	cp ipip.php $(prefix)/share/17monipdb/
-	cp ipsc ipip.sh overlay-ipinfo.sh tracert.sh $(prefix)/bin/
+install: ipsc
+	@[ -f qqwry.dat ] || wget http://s.rssn.cn:1080/qqwry.dat -O qqwry.dat
+	mkdir -p /usr/bin /usr/lib/ipsc
+	@cp -v ipip.php qqwry.dat /usr/lib/ipsc/
+	@cp -v ipsc ipip.sh overlay-ipinfo.sh tracert.sh /usr/bin/
+	@[ -d /www ] && cp -v ips.php /www/ || :
 

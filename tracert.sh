@@ -1,4 +1,2 @@
-#!/bin/bash
-
-traceroute $* | overlay-ipinfo.sh
-
+#!/bin/sh
+exec overlay-ipinfo.sh traceroute "$@"

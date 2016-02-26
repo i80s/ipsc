@@ -6,7 +6,7 @@ text_ip_location()
 	while read -r line; do
 		# '[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+'
 		local ips=`echo "$line" | grep -o '\<[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\>'`
-		local ips_info="" ip
+		local ip_geo_list="" ip
 		for ip in $ips; do
 			case "$ip" in
 				10.*|172.16.*|172.17.*|172.18.*|172.19.*|172.2?.*|172.30.*|172.31.*| \
@@ -14,13 +14,12 @@ text_ip_location()
 					continue
 					;;
 			esac
-			local info=`ipip.sh "$ip"`
-			ips_info="$ips_info  $info"
+			local geo=`php /usr/lib/ipsc/ipip.php "$ip"`
+			ip_geo_list="$ip_geo_list  $geo"
 		done
 
-
-		if [ -n "$ips_info" ]; then
-			echo -e "$line \033[32m$ips_info\033[0m"
+		if [ -n "$ip_geo_list" ]; then
+			echo -e "$line \033[32m${ip_geo_list}\033[0m"
 		else
 			echo "$line"
 		fi

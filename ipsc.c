@@ -1,9 +1,8 @@
 /************************************************************
  * 纯真IP数据库查询工具（GNU C）
- * Author: rssn
+ * Author: Justin Liu
  * Email : rssn@163.com
  * QQ    : 126027268
- * Blog  : http://blog.csdn.net/rssn_net/
  ************************************************************/
 
 #include <stdio.h>
@@ -88,13 +87,13 @@ int main(int argc, char * argv[])
 	int i;
 	//数据文件名
 #ifdef WIN32
-	const char * fnData="QQWry.Dat";
+	const char * fnData="qqwry.dat";
     WSADATA wsaData;
     WORD wVersionRequested;
 	wVersionRequested = MAKEWORD(2, 2);
     WSAStartup(wVersionRequested, &wsaData);
 #else
-	const char * fnData="/usr/local/share/ipsc/QQWry.Dat";
+	const char * fnData="/usr/lib/ipsc/qqwry.dat";
 #endif
 
 	if(argc>1)
