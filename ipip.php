@@ -293,9 +293,12 @@ function get_ip_geoinfo($host)
 	/* Search CZ88.net database */
 	$cz88_info = cz88_query($ip);
 
-	if ($ipip_array[0] == '中国') {
-		if ($ipip_array[1] != '台湾' && $ipip_array[1] != '香港' &&
-			$ipip_array[1] != '澳门') {
+	$ct = $ipip_array[0];
+	$st = $ipip_array[1];
+
+	if ($ct == '中国' || $ct == 'China') {
+		if ($st != '台湾' && $st != '香港' && $st != '澳门' &&
+			$st != 'Taiwan' && $st != 'Hong Kong' && $st != 'Macau') {
 			foreach (array('BGP', 'bgp', '电信', '联通', '移动',
 				'铁通', '鹏博士', '电信通', '长城宽带', '长宽',
 				'方正宽带', '教育网', 'CERNET', 'cernet', '赛尔')
