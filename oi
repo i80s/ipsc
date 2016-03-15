@@ -6,7 +6,7 @@ text_ip_location()
 	while read -r line; do
 		# '[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+'
 		local ips=`echo "$line" | grep -o '\<[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\>'`
-		local ip_geo_list="" ip
+		local ip_geo_list= ip
 		for ip in $ips; do
 			case "$ip" in
 				10.*|172.16.*|172.17.*|172.18.*|172.19.*|172.2?.*|172.30.*|172.31.*| \
