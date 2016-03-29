@@ -1,2 +1,2 @@
 #!/bin/sh
-exec overlay-ipinfo.sh traceroute "$@"
+exec oi traceroute "$@"
