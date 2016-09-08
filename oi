@@ -3,7 +3,7 @@
 text_ip_location()
 {
 	local line
-	while read -r line; do
+	while IFS= read -r line; do
 		# '[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+'
 		local ips=`echo "$line" | grep -o '\<[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\>'`
 		local ip_geo_list= ip
