@@ -274,44 +274,64 @@ function cz88_query($ip) {
 
 function get_ip_geoinfo($host)
 {
+	$isp_tags = array(
+		"BGP"      => "BGP",
+		"bgp"      => "BGP",
+		"电信通"   => "鹏博士",
+		"电信"     => "电信",
+		"联通"     => "联通",
+		"移动"     => "移动",
+		"铁通"     => "铁通",
+		"教育网"   => "教育网",
+		"CERNET"   => "教育网",
+		"cernet"   => "教育网",
+		"鹏博士"   => "鹏博士",
+		"长城宽带" => "鹏博士",
+		"长宽"     => "鹏博士",
+		"宽带通"   => "鹏博士",
+		"方正宽带" => "方正宽带",
+		"歌华有线" => "歌华有线",
+		"光环新网" => "光环新网",
+		"华数宽带" => "华数宽带",
+		"华数传媒" => "华数宽带",
+		"东方有线" => "东方有线",
+		"中信网络" => "中信网络",
+		"天威宽带" => "天威宽带",
+		"天威视讯" => "天威宽带",
+		);
+
 	$ip = gethostbyname($host);
-	
-	/* Search IPIP.net database */
+
+	/* Query IPIP.net for geo location */
 	$ipip = new IP();
 	$ipip_array = $ipip::find($ip);
-	$ipip_info = "";
-	foreach ($ipip_array as $r) {
-		if (!$r)
-			continue;
-		if ($ipip_info) {
-			$ipip_info .= ",$r";
-		} else {
-			$ipip_info = "$r";
-		}
-	}
 
-	/* Search CZ88.net database */
-	$cz88_info = cz88_query($ip);
-
-	$ct = $ipip_array[0];
-	$st = $ipip_array[1];
-
-	if ($ct == '中国' || $ct == 'China') {
-		if ($st != '台湾' && $st != '香港' && $st != '澳门' &&
-			$st != 'Taiwan' && $st != 'Hong Kong' && $st != 'Macau') {
-			foreach (array('BGP', 'bgp', '电信', '联通', '移动',
-				'铁通', '鹏博士', '电信通', '长城宽带', '长宽',
-				'方正宽带', '教育网', 'CERNET', 'cernet', '赛尔')
-				as $tag) {
-				if (strrpos($cz88_info, $tag)) {
-					$ipip_info .= ",$tag";
-					break;
-				}
+	$ct = $ipip_array[0]; $st = $ipip_array[1];
+	if (($ct == "中国" || $ct == "China") && ($st != "台湾" && $st != "香港" &&
+		$st != "澳门" && $st != "Taiwan" && $st != "Hong Kong" && $st != "Macau")) {
+		foreach ($isp_tags as $tag => $real_isp) {
+			/* Query CZ88.net for ISP */
+			$cz88_info = cz88_query($ip);
+			if (strrpos($cz88_info, $tag)) {
+				$ipip_array[4] = $real_isp;
+				break;
 			}
 		}
 	}
 
-	return "$ipip_info";
+	/* Text format output */
+	$ip_info_text = "";
+	foreach ($ipip_array as $r) {
+		if (!$r)
+			continue;
+		if ($ip_info_text) {
+			$ip_info_text .= ",$r";
+		} else {
+			$ip_info_text = "$r";
+		}
+	}
+
+	return $ip_info_text;
 }
 
 if (!isset($IPIP_PHP_INCLUDED)) {

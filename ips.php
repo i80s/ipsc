@@ -143,6 +143,9 @@ function html_default()
 {
 	$user_ip = $_SERVER["REMOTE_ADDR"];
 	$user_agent = $_SERVER["HTTP_USER_AGENT"];
+
+	if (preg_match('/mozilla|w3m/i', $user_agent)) {
+		/* Access from a web browser */
 ?>
 <html>
 <head>
@@ -173,6 +176,14 @@ function html_default()
 </body>
 </html>
 <?php
+	} else {
+		/* Access from wget, curl, ... */
+		printf("OS: %s\n", get_user_os($user_agent));
+		printf("Browser: %s\n", get_user_browser($user_agent));
+		printf("IP address: %s (server: %s)\n", $_SERVER['REMOTE_ADDR'], $_SERVER['SERVER_ADDR']);
+		printf("Location: %s\n", get_ip_geoinfo($user_ip));
+		printf("User-Agent: %s\n", $user_agent);
+	}
 }
 
 //IP查询页
