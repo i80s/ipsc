@@ -7,6 +7,15 @@ $time_start = getmicrotime();
 $IPIP_PHP_INCLUDED = 1;
 include("/usr/lib/ipsc/ipip.php");
 
+if (phpversion() >= 7.0) {
+	function ereg($pattern, $text) {
+		return preg_match("/$pattern/", $text);
+	}
+	function eregi($pattern, $text) {
+		return preg_match("/$pattern/i", $text);
+	}
+}
+
 function getmicrotime()
 {
 	list($usec, $sec) = explode(" ",microtime());
