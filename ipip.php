@@ -334,10 +334,76 @@ function get_ip_geoinfo($host)
 	return $ip_info_text;
 }
 
+
+function __is_tty()
+{
+	static $__cached_is_tty = null;
+
+	if (is_null($__cached_is_tty)) {
+		$pid = getmypid();
+		$tty_file = readlink("/proc/$pid/fd/1");
+		switch (substr($tty_file, 0, 8)) {
+			case "/dev/pts":
+			case "/dev/tty":
+			case "/dev/pty":
+				$__cached_is_tty = true;
+				break;
+			default:
+				$__cached_is_tty = false;
+		}
+	}
+
+	return $__cached_is_tty;
+}
+
+function __is_public_ip($ip)
+{
+	$ip = explode('.', $ip);
+	$n = $ip[0] * 16777216 + $ip[1] * 65536 + $ip[2] * 256 + $ip[3];
+	if ($n < 16777216) return false;
+	if ($n >= 167772160 && $n < 184549376) return false;
+	if ($n >= 1681915904 && $n < 1686110208) return false;
+	if ($n >= 2130706432 && $n < 2147483648) return false;
+	if ($n >= 2886729728 && $n < 2887778304) return false;
+	if ($n >= 3232235520 && $n < 3232301056) return false;
+	if ($n >= 3758096384) return false;
+	return true;
+}
+
+function overlay_ip_text()
+{
+	while ($text_line = fgets(STDIN)){
+		$text_line = rtrim($text_line);
+		if (preg_match_all('/\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/', $text_line, $ip_arrays)) {
+			$ip_info = "";
+			foreach ($ip_arrays[0] as $ip) {
+				if (__is_public_ip($ip))
+					$ip_info .= get_ip_geoinfo($ip) . " ";
+			}
+			$ip_info = rtrim($ip_info);
+			if (empty($ip_info)) {
+				echo "$text_line\n";
+			} else {
+				if (__is_tty()) {
+					echo "$text_line  \033[32m${ip_info}\033[0m\n";
+				} else {
+					echo "$text_line  $ip_info\n";
+				}
+			}
+		} else {
+			echo "$text_line\n";
+		}
+	}
+}
+
 if (!isset($IPIP_PHP_INCLUDED)) {
-	if (sizeof($argv) < 2)
+	if (!isset($argv[1])) {
 		die("*** Insufficient parameters.\n");
-	echo get_ip_geoinfo($argv[1]) . "\n";
+	} else if ($argv[1] == "-o") {
+		overlay_ip_text();
+	} else {
+		echo get_ip_geoinfo($argv[1]) . "\n";
+	}
 }
 
 ?>
