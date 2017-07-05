@@ -1,0 +1,2 @@
+#!/bin/sh
+exec php /usr/lib/ipsc/ipip.php "$1"
