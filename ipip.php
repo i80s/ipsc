@@ -272,7 +272,7 @@ function cz88_query($ip) {
 ?>
 <?php
 
-function get_ip_geoinfo($host)
+function get_ip_geoinfo_array($host)
 {
 	$isp_tags = array(
 		"BGP"      => "BGP",
@@ -318,6 +318,13 @@ function get_ip_geoinfo($host)
 			}
 		}
 	}
+
+	return $ipip_array;
+}
+
+function get_ip_geoinfo($host)
+{
+	$ipip_array = get_ip_geoinfo_array($host);
 
 	/* Text format output */
 	$ip_info_text = "";
