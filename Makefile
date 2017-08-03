@@ -1,7 +1,7 @@
 CC ?= $(CROSS_COMPILE)gcc
 HEADERS := IpLocator.h
 
-SYNC_SERVERS := root@dev.ikuai8.com root@lax.rssn.cn root@hk.rssn.cn
+SYNC_SERVERS := root@devx root@lax.rssn.cn root@hk.rssn.cn
 
 ipsc: ipsc.o IpLocator.o
 	$(CC) -o $@ $^
@@ -22,3 +22,6 @@ install: ipsc
 up: ipsc
 	$(foreach h,$(SYNC_SERVERS),rsync ipip.php qqwry.dat 17monipdb.dat $(h):/usr/lib/ipsc/ -av -z;)
 	$(foreach h,$(SYNC_SERVERS),rsync oi ipsc ipip $(h):/usr/bin/ -av -z;)
+	rsync -e 'ssh -p13022' ipip.php qqwry.dat 17monipdb.dat root@apix:/usr/lib/ipsc/ -av -z
+	rsync -e 'ssh -p13022' oi ipsc ipip root@apix:/usr/bin/ -av -z
+
