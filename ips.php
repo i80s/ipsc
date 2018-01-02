@@ -167,14 +167,15 @@ function html_default()
 <table id="info">
 	<thead><tr><th colspan="2">您的网络环境信息</th></tr></thead>
 	<tbody>
-		<tr class="normal"><th>操作系统:</th><td><?=get_user_os($user_agent)?></td></tr>
-		<tr class="hlight"><th>浏览器:</th><td><?=get_user_browser($user_agent)?></td></tr>
-		<tr class="normal"><th>ＩＰ地址:</th><td><?=$_SERVER['REMOTE_ADDR'] ?> （服务器：<b><?=$_SERVER['SERVER_ADDR'] ?></b>）</td></tr>
-		<tr class="hlight"><th>ＩＰ所在地:</th><td><?=get_ip_geoinfo($user_ip)?></td></tr>
-		<tr class="normal"><th>User-Agent:</th><td><?=$user_agent?></td></tr>
+		<tr class="normal"><th>操作系统</th><td><?=get_user_os($user_agent)?></td></tr>
+		<tr class="hlight"><th>浏览器</th><td><?=get_user_browser($user_agent)?></td></tr>
+		<tr class="normal"><th>IP地址</th><td><?=$_SERVER['REMOTE_ADDR'] ?>:<?=$_SERVER['REMOTE_PORT'] ?></td></tr>
+		<tr class="hlight"><th>IP所在地</th><td><?=get_ip_geoinfo($user_ip)?></td></tr>
+		<tr class="normal"><th>服务器IP</th><td><?=$_SERVER['SERVER_ADDR'] ?></td></tr>
+		<tr class="hlight"><th>User-Agent</th><td><?=$user_agent?></td></tr>
 		<!-- <tr class="hlight"><th>Referrer:</th><td><?=$_SERVER['HTTP_REFERER'] ?></td></tr> -->
 	<form action="?" method="get">
-		<tr class="hlight"><td colspan="2">
+		<tr class="normal"><td colspan="2">
 <input type="text" name="p" value="<?=$_SERVER['REMOTE_ADDR'] ?>" size="20" />&nbsp;
 <input type="submit" value="查询IP所在地" />
 		</td></tr>
@@ -189,7 +190,8 @@ function html_default()
 		/* Access from wget, curl, ... */
 		printf("OS: %s\n", get_user_os($user_agent));
 		printf("Browser: %s\n", get_user_browser($user_agent));
-		printf("IP address: %s (server: %s)\n", $_SERVER['REMOTE_ADDR'], $_SERVER['SERVER_ADDR']);
+		printf("IP address: %s:%d\n", $_SERVER['REMOTE_ADDR'], $_SERVER['REMOTE_PORT']);
+		printf("Server: %s\n", $_SERVER['SERVER_ADDR']);
 		printf("Location: %s\n", get_ip_geoinfo($user_ip));
 		printf("User-Agent: %s\n", $user_agent);
 	}
