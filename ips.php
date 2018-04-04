@@ -5,7 +5,7 @@ error_reporting(0);
 $time_start = getmicrotime();
 
 $IPIP_PHP_INCLUDED = 1;
-include("/usr/lib/ipsc/ipip.php");
+include("/usr/local/lib/ipsc/ipsc.php");
 
 if (phpversion() >= 7.0) {
 	function ereg($pattern, $text) {
