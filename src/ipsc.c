@@ -93,7 +93,7 @@ int main(int argc, char * argv[])
 	wVersionRequested = MAKEWORD(2, 2);
     WSAStartup(wVersionRequested, &wsaData);
 #else
-	const char * fnData="/usr/lib/ipsc/qqwry.dat";
+	const char * fnData="/usr/local/lib/ipsc/qqwry.dat";
 #endif
 
 	if(argc>1)
