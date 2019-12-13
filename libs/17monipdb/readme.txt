@@ -4,6 +4,44 @@
 
 全球 IPv4 地址归属地数据库(IPIP.NET 版)
 
+--- 2019 年 1 月引言 ---
+
+这是 IP 库的第二十二个公开版本。
+
+我们在去年六月份开始着手制作 IPv6 数据，八月份推出了 IPv6 产品第一版，因为之前的 DAT/DATX 均只考虑了 IPv4 数据格式，所以同时新增了一个数据格式叫 IPDB。
+
+本次更新会继续提供 DATX 和 IPDB 两个格式，但是不出意外的话，下一次更新将只提供 IPDB 格式。我们也会尽快推动所有客户尽快切换到 IPDB 格式上。
+
+IDPB 解析代码地址：https://www.ipip.net/support/code.html
+
+另外我写了《IPIP.NET 2018 年总结与 2019 年计划》，有兴趣的可以来看看：https://mp.weixin.qq.com/s/QcLDyV8KXNrDXKiKyQW9aw
+
+欢迎大家反馈。
+
+--
+高春辉
+Paul Gao
+gaochunhui@gmail.com
+http://www.ipip.net/
+
+--- 2018 年 7 月引言 ---
+
+这是 IP 库的第二十一个公开版本。
+
+根据三月份的决定，本次开始将只提供 DATX 格式的数据。
+
+另外，目前正在制作 IPv6 的数据，由于目前的数据格式只考虑了 IPv4 的情况，所以有可能未来还会变更，提前说明一下。
+
+DATX 解析代码仓库地址：https://github.com/ipipnet/datx
+
+欢迎大家反馈。
+
+--
+高春辉
+Paul Gao
+gaochunhui@gmail.com
+http://www.ipip.net/
+
 --- 2018 年 3 月引言 ---
 
 这是 IP 库的第二十个公开版本。
