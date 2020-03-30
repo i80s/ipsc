@@ -161,7 +161,7 @@ function cz88_query($ip) {
 		$geoinfo = 'Unknown';
 	}
 
-	return iconv("GB2312", "UTF-8", $geoinfo);
+	return @iconv("GB2312", "UTF-8", $geoinfo);
 }
 ?>
 <?php
