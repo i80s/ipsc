@@ -216,7 +216,7 @@ function html_default()
 		/* From wget, curl, ... */
 		printf("OS: %s\n", get_user_os($user_agent));
 		printf("Browser: %s\n", get_user_browser($user_agent));
-		printf("IP address: %s:%d\n", $remote_ip, $remote_port);
+		printf("IP address: %s:%d%s\n", $remote_ip, $remote_port, $remote_x_ip ? " ($remote_x_ip)" : '');
 		printf("Server: %s\n", $server_ip);
 		printf("Location: %s\n", get_ip_geoinfo($remote_ip));
 		printf("User-Agent: %s\n", $user_agent);
