@@ -76,9 +76,8 @@ function get_user_browser($agent)
 function get_user_os($agent)
 {
 	$sys="Unknown";
-	//$agent = $_SERVER["HTTP_USER_AGENT"];
-	if (eregi('win',$agent))
-	{
+	//$agent = $_SERVER['HTTP_USER_AGENT'];
+	if (eregi('win',$agent)) {
 		$sys="Windows ";
 		if(eregi('nt 5\.1',$agent))
 			$sys.="XP";
@@ -98,9 +97,7 @@ function get_user_os($agent)
 			$sys.="32";
 		elseif (eregi('nt 6\.0',$agent))
 			$sys.="Vista";
-	}
-	else
-	{
+	} else {
 		if (eregi('linux',$agent))
 			$sys="Linux";
 		elseif (eregi('unix',$agent))
@@ -117,14 +114,14 @@ function get_user_os($agent)
 	return $sys;
 }
 
-$search_ip = @$_GET["p"];
+$search_ip = @$_GET['p'];
 
 main();
 
 //主函数入口
 function main()
 {
-	switch (@$_GET["type"]) {
+	switch (@$_GET['type']) {
 	case "css":
 		html_css();
 		break;
@@ -132,7 +129,7 @@ function main()
 		ips_js();
 		break;
 	default:
-		if (strlen(@$_GET["p"])>0) {
+		if (strlen(@$_GET['p'])>0) {
 			html_search();
 		} else {
 			html_default();
@@ -150,11 +147,20 @@ function ips_js()
 //默认页：显示用户网络环境信息
 function html_default()
 {
-	$user_ip = $_SERVER["REMOTE_ADDR"];
-	$user_agent = $_SERVER["HTTP_USER_AGENT"];
+	$server_ip = $_SERVER['SERVER_ADDR'];
+	$remote_ip = $_SERVER['REMOTE_ADDR'];
+	$remote_port = $_SERVER['REMOTE_PORT'];
+	$user_agent = $_SERVER['HTTP_USER_AGENT'];
+
+	$remote_x_ip = '';
+	if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+		$remote_x_ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+	} else if (isset($_SERVER['HTTP_X_REAL_IP'])) {
+		$remote_x_ip = $_SERVER['HTTP_X_REAL_IP'];
+	}
 
 	if (preg_match('/mozilla|w3m/i', $user_agent)) {
-		/* Access from a web browser */
+		/* From a web browser */
 ?>
 <html>
 <head>
@@ -165,34 +171,54 @@ function html_default()
 </head>
 <body>
 <table id="info">
-	<thead><tr><th colspan="2">您的网络环境信息</th></tr></thead>
+	<thead>
+		<tr><th colspan="2">您的网络环境信息</th></tr>
+	</thead>
 	<tbody>
-		<tr class="normal"><th>操作系统</th><td><?=get_user_os($user_agent)?></td></tr>
-		<tr class="hlight"><th>浏览器</th><td><?=get_user_browser($user_agent)?></td></tr>
-		<tr class="normal"><th>IP地址</th><td><?=$_SERVER['REMOTE_ADDR'] ?>:<?=$_SERVER['REMOTE_PORT'] ?></td></tr>
-		<tr class="hlight"><th>IP所在地</th><td><?=get_ip_geoinfo($user_ip)?></td></tr>
-		<tr class="normal"><th>服务器IP</th><td><?=$_SERVER['SERVER_ADDR'] ?></td></tr>
-		<tr class="hlight"><th>User-Agent</th><td><?=$user_agent?></td></tr>
-		<!-- <tr class="hlight"><th>Referrer:</th><td><?=$_SERVER['HTTP_REFERER'] ?></td></tr> -->
-	<form action="?" method="get">
-		<tr class="normal"><td colspan="2">
-<input type="text" name="p" value="<?=$_SERVER['REMOTE_ADDR'] ?>" size="20" />&nbsp;
-<input type="submit" value="查询IP所在地" />
-		</td></tr>
-	</form>
+		<tr class="normal">
+			<th>操作系统</th>
+			<td><?= get_user_os($user_agent) ?></td>
+		</tr>
+		<tr class="hlight">
+			<th>浏览器</th>
+			<td><?= get_user_browser($user_agent) ?></td>
+		</tr>
+		<tr class="normal">
+			<th>IP地址</th>
+			<td><?= $remote_ip ?>:<?= $remote_port ?><?= $remote_x_ip ? " ($remote_x_ip)" : '' ?></td>
+		</tr>
+		<tr class="hlight">
+			<th>IP所在地</th><td><?= get_ip_geoinfo($remote_ip) ?></td>
+		</tr>
+		<tr class="normal">
+			<th>服务器IP</th><td><?= $server_ip ?></td>
+		</tr>
+		<tr class="hlight">
+			<th>User-Agent</th><td><?= $user_agent ?></td>
+		</tr>
+		<tr class="normal">
+			<form action="" method="get">
+				<td colspan="2">
+					<input type="text" name="p" value="<?= $remote_ip ?>" size="20" />
+					<input type="submit" value="查询IP所在地" />
+				</td>
+			</form>
+		</tr>
 	</tbody>
 </table>
-<div id="runtime">页面执行时间：<font color="red"><?=get_runtime()?></font>毫秒</div>
+<div id="runtime">
+	页面执行时间：<font color="red"><?= get_runtime() ?></font>毫秒
+</div>
 </body>
 </html>
 <?php
 	} else {
-		/* Access from wget, curl, ... */
+		/* From wget, curl, ... */
 		printf("OS: %s\n", get_user_os($user_agent));
 		printf("Browser: %s\n", get_user_browser($user_agent));
-		printf("IP address: %s:%d\n", $_SERVER['REMOTE_ADDR'], $_SERVER['REMOTE_PORT']);
-		printf("Server: %s\n", $_SERVER['SERVER_ADDR']);
-		printf("Location: %s\n", get_ip_geoinfo($user_ip));
+		printf("IP address: %s:%d\n", $remote_ip, $remote_port);
+		printf("Server: %s\n", $server_ip);
+		printf("Location: %s\n", get_ip_geoinfo($remote_ip));
 		printf("User-Agent: %s\n", $user_agent);
 	}
 }
@@ -207,25 +233,33 @@ function html_search()
 ?>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="viewport" content="user-scalable=no, width=device-width, target-densityDpi=device-dpi,initial-scale=0.5, maximum-scale=0.5, minimum-scale=0.5;" />
-<title>IP查询</title>
-<?php html_css();?>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="viewport" content="user-scalable=no, width=device-width, target-densityDpi=device-dpi,initial-scale=0.5, maximum-scale=0.5, minimum-scale=0.5;" />
+	<title>IP查询</title>
+	<?php html_css(); ?>
 </head>
 <body>
 <table id="info">
-	<thead><tr><th colspan="2">IP查询结果</th></tr></thead>
+	<thead>
+		<tr><th colspan="2">IP查询结果</th></tr>
+	</thead>
 	<tbody>
-		<tr class="normal"><th>查询ＩＰ：</th><td><?=$search_ip?></td></tr>
-		<tr class="hlight"><th>ＩＰ所在地：</th><td><?=get_ip_geoinfo($search_ip)?> ( <?=$__ip_num?> )</td></tr>
-	<form action="?" method="get">
-		<tr class="normal"><td colspan="2">
-	<input type="text" name="p" value="<?=$search_ip?>" size="20" />&nbsp;<input type="submit" value="查询IP所在地" />
-		</td></tr>
-	</form>
+		<tr class="normal">
+			<th>查询ＩＰ：</th><td><?= $search_ip ?></td>
+		</tr>
+		<tr class="hlight">
+			<th>ＩＰ所在地：</th><td><?= get_ip_geoinfo($search_ip) ?> ( <?= $__ip_num ?> )</td>
+		</tr>
+		<tr class="normal">
+			<form action="?" method="get">
+				<td colspan="2">
+					<input type="text" name="p" value="<?= $search_ip ?>" size="20" /> <input type="submit" value="查询IP所在地" />
+				</td>
+			</form>
+		</tr>
 	</tbody>
 </table>
-<div id="runtime">页面执行时间：<font color="red"><?=get_runtime()?></font>毫秒</div>
+<div id="runtime">页面执行时间：<font color="red"><?= get_runtime() ?></font>毫秒</div>
 </body>
 </html>
 <?php
