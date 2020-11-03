@@ -10,6 +10,7 @@ function get_ip_geoinfo_array($host) {
 			@$geo['country'],
 			@$geo['province'],
 			@$geo['city'],
+			'',
 			@$geo['isp']
 		);
 }
