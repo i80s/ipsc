@@ -5,30 +5,11 @@ include(__DIR__ . "/IpLocation.php");
 use itbdw\Ip\IpLocation;
 
 function get_ip_geoinfo_array($host) {
-	$geo = IpLocation::getLocation(gethostbyname($host));
-	return array (
-			@$geo['country'],
-			@$geo['province'],
-			@$geo['city'],
-			'',
-			@$geo['isp']
-		);
+	$r = IpLocation::getLocation(gethostbyname($host));
+	return array (@$r['country'], @$r['province'], @$r['city'], '', @$r['isp']);
 }
-
 function get_ip_geoinfo($host) {
-	/* Text format output */
-	$r_text = '';
-	$r_array = get_ip_geoinfo_array($host);
-	foreach ($r_array as $r) {
-		if (!$r)
-			continue;
-		if ($r_text) {
-			$r_text .= ",$r";
-		} else {
-			$r_text = "$r";
-		}
-	}
-	return $r_text;
+	return implode(',', array_filter(get_ip_geoinfo_array($host)));
 }
 
 
