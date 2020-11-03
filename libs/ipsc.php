@@ -4,8 +4,7 @@ include(__DIR__ . "/IpLocation.php");
 
 use itbdw\Ip\IpLocation;
 
-function get_ip_geoinfo_array($host)
-{
+function get_ip_geoinfo_array($host) {
 	$geo = IpLocation::getLocation(gethostbyname($host));
 	return array (
 			@$geo['country'],
@@ -15,8 +14,7 @@ function get_ip_geoinfo_array($host)
 		);
 }
 
-function get_ip_geoinfo($host)
-{
+function get_ip_geoinfo($host) {
 	/* Text format output */
 	$r_text = '';
 	$r_array = get_ip_geoinfo_array($host);
@@ -33,8 +31,7 @@ function get_ip_geoinfo($host)
 }
 
 
-function __is_tty()
-{
+function __is_tty() {
 	static $__cached_is_tty = null;
 
 	if (is_null($__cached_is_tty)) {
@@ -54,8 +51,7 @@ function __is_tty()
 	return $__cached_is_tty;
 }
 
-function __is_public_ip($ip)
-{
+function __is_public_ip($ip) {
 	$ip = explode('.', $ip);
 	$n = $ip[0] * 16777216 + $ip[1] * 65536 + $ip[2] * 256 + $ip[3];
 	if ($n < 16777216) return false;
@@ -68,28 +64,27 @@ function __is_public_ip($ip)
 	return true;
 }
 
-function overlay_ip_text()
-{
-	while ($text_line = fgets(STDIN)){
-		$text_line = rtrim($text_line);
-		if (preg_match_all('/\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/', $text_line, $ip_arrays)) {
-			$ip_info = "";
+function overlay_ip_text() {
+	while ($raw_text = fgets(STDIN)){
+		$raw_text = rtrim($raw_text);
+		if (preg_match_all('/\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/', $raw_text, $ip_arrays)) {
+			$ip_text = "";
 			foreach ($ip_arrays[0] as $ip) {
 				if (__is_public_ip($ip))
-					$ip_info .= get_ip_geoinfo($ip) . " ";
+					$ip_text .= get_ip_geoinfo($ip) . " ";
 			}
-			$ip_info = rtrim($ip_info);
-			if (empty($ip_info)) {
-				echo "$text_line\n";
+			$ip_text = rtrim($ip_text);
+			if (empty($ip_text)) {
+				echo "$raw_text\n";
 			} else {
 				if (__is_tty()) {
-					echo "$text_line  \033[32m${ip_info}\033[0m\n";
+					echo "$raw_text  \033[32m${ip_text}\033[0m\n";
 				} else {
-					echo "$text_line  $ip_info\n";
+					echo "$raw_text  $ip_text\n";
 				}
 			}
 		} else {
-			echo "$text_line\n";
+			echo "$raw_text\n";
 		}
 	}
 }
