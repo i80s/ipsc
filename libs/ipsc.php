@@ -77,7 +77,10 @@ if (!isset($IPIP_PHP_INCLUDED)) {
 	} else if ($argv[1] == "-o") {
 		overlay_ip_text();
 	} else {
-		echo get_ip_geoinfo($argv[1]) . "\n";
+		unset($argv[0]);
+		foreach ($argv as $arg) {
+			echo "$arg " . get_ip_geoinfo($arg) . "\n";
+		}
 	}
 }
 
