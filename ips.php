@@ -148,6 +148,7 @@ function ips_js()
 function html_default()
 {
 	$server_ip = $_SERVER['SERVER_ADDR'];
+	$server_port = $_SERVER['SERVER_PORT'];
 	$remote_ip = $_SERVER['REMOTE_ADDR'];
 	$remote_port = $_SERVER['REMOTE_PORT'];
 	$user_agent = $_SERVER['HTTP_USER_AGENT'];
@@ -191,7 +192,7 @@ function html_default()
 			<th>IP所在地</th><td><?= get_ip_geoinfo($remote_ip) ?></td>
 		</tr>
 		<tr class="normal">
-			<th>服务器IP</th><td><?= $server_ip ?></td>
+			<th>服务器</th><td><?= $server_ip ?>:<?= $server_port ?></td>
 		</tr>
 		<tr class="hlight">
 			<th>User-Agent</th><td><?= $user_agent ?></td>
@@ -217,7 +218,7 @@ function html_default()
 		printf("OS: %s\n", get_user_os($user_agent));
 		printf("Browser: %s\n", get_user_browser($user_agent));
 		printf("IP address: %s:%d%s\n", $remote_ip, $remote_port, $remote_x_ip ? " ($remote_x_ip)" : '');
-		printf("Server: %s\n", $server_ip);
+		printf("Server: %s:%s\n", $server_ip, $server_port);
 		printf("Location: %s\n", get_ip_geoinfo($remote_ip));
 		printf("User-Agent: %s\n", $user_agent);
 	}
