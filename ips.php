@@ -148,16 +148,20 @@ function ips_js()
 function html_default()
 {
 	$server_ip = $_SERVER['SERVER_ADDR'];
+	if (preg_match('/:/', $server_ip))
+		$server_ip = "[$server_ip]";
 	$server_port = $_SERVER['SERVER_PORT'];
 	$remote_ip = $_SERVER['REMOTE_ADDR'];
+	if (preg_match('/:/', $remote_ip))
+		$remote_ip = "[$remote_ip]";
 	$remote_port = $_SERVER['REMOTE_PORT'];
 	$user_agent = $_SERVER['HTTP_USER_AGENT'];
 
-	$remote_x_ip = '';
+	$x_fwd_for_ip = '';
 	if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-		$remote_x_ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+		$x_fwd_for_ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
 	} else if (isset($_SERVER['HTTP_X_REAL_IP'])) {
-		$remote_x_ip = $_SERVER['HTTP_X_REAL_IP'];
+		$x_fwd_for_ip = $_SERVER['HTTP_X_REAL_IP'];
 	}
 
 	if (preg_match('/mozilla|w3m/i', $user_agent)) {
@@ -186,7 +190,7 @@ function html_default()
 		</tr>
 		<tr class="normal">
 			<th>IP地址</th>
-			<td><?= $remote_ip ?>:<?= $remote_port ?><?= $remote_x_ip ? " ($remote_x_ip)" : '' ?></td>
+			<td><?= $remote_ip ?>:<?= $remote_port ?><?= $x_fwd_for_ip ? " ($x_fwd_for_ip)" : '' ?></td>
 		</tr>
 		<tr class="hlight">
 			<th>IP所在地</th><td><?= get_ip_geoinfo($remote_ip) ?></td>
@@ -217,7 +221,7 @@ function html_default()
 		/* From wget, curl, ... */
 		printf("OS: %s\n", get_user_os($user_agent));
 		printf("Browser: %s\n", get_user_browser($user_agent));
-		printf("IP address: %s:%d%s\n", $remote_ip, $remote_port, $remote_x_ip ? " ($remote_x_ip)" : '');
+		printf("IP address: %s:%d%s\n", $remote_ip, $remote_port, $x_fwd_for_ip ? " ($x_fwd_for_ip)" : '');
 		printf("Server: %s:%s\n", $server_ip, $server_port);
 		printf("Location: %s\n", get_ip_geoinfo($remote_ip));
 		printf("User-Agent: %s\n", $user_agent);
@@ -246,10 +250,10 @@ function html_search()
 	</thead>
 	<tbody>
 		<tr class="normal">
-			<th>查询ＩＰ：</th><td><?= $search_ip ?></td>
+			<th>查询IP</th><td><?= $search_ip ?></td>
 		</tr>
 		<tr class="hlight">
-			<th>ＩＰ所在地：</th><td><?= get_ip_geoinfo($search_ip) ?> ( <?= $__ip_num ?> )</td>
+			<th>IP所在地</th><td><?= get_ip_geoinfo($search_ip) ?> ( <?= $__ip_num ?> )</td>
 		</tr>
 		<tr class="normal">
 			<form action="?" method="get">
